@@ -1,12 +1,7 @@
--- ============================================================
--- RaceDay SSMS Verification Queries
--- Run this after docs/RaceDay_Database.sql completes successfully
--- ============================================================
-
 USE RaceDayDB;
 GO
 
--- Confirm the seven required tables exist.
+-- check tables
 SELECT TABLE_NAME
 FROM INFORMATION_SCHEMA.TABLES
 WHERE TABLE_SCHEMA = 'dbo'
@@ -14,7 +9,7 @@ WHERE TABLE_SCHEMA = 'dbo'
 ORDER BY TABLE_NAME;
 GO
 
--- Check the sample data created by the database script.
+-- check sample data
 SELECT * FROM dbo.Organiser;
 SELECT * FROM dbo.Participant;
 SELECT * FROM dbo.Event;
@@ -24,7 +19,7 @@ SELECT * FROM dbo.Payment;
 SELECT * FROM dbo.Race_Result;
 GO
 
--- Check event/category relationships and participant counts.
+-- check event categories
 SELECT
     e.Event_ID,
     e.Event_Name,
@@ -39,7 +34,7 @@ INNER JOIN dbo.Race_Category rc
 ORDER BY e.Event_ID, rc.Distance_KM;
 GO
 
--- Check enrolment relationships.
+-- check enrolments
 SELECT
     en.Enrolment_ID,
     p.First_Name,
@@ -59,7 +54,7 @@ INNER JOIN dbo.Race_Category rc
 ORDER BY en.Enrolment_ID;
 GO
 
--- Check payment attempts and successful payments.
+-- check payments
 SELECT
     Enrolment_ID,
     COUNT(*) AS Payment_Attempts,
@@ -69,7 +64,7 @@ GROUP BY Enrolment_ID
 ORDER BY Enrolment_ID;
 GO
 
--- Confirm the RaceDay triggers exist.
+-- check triggers
 SELECT name AS Trigger_Name
 FROM sys.triggers
 WHERE name IN (
@@ -79,7 +74,7 @@ WHERE name IN (
 ORDER BY name;
 GO
 
--- Confirm the one-successful-payment filtered index exists.
+-- check payment index
 SELECT name AS Index_Name
 FROM sys.indexes
 WHERE object_id = OBJECT_ID('dbo.Payment')

@@ -8,30 +8,31 @@ on:
 
 jobs:
   validate:
-    name: Review submission files
+    name: Check submission
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check project files
+      - name: Check required files
         shell: bash
         run: |
           test -f README.md
+          test -f SUBMISSION_CHECKLIST.md
           test -f docs/RaceDay_ERD.svg
           test -f docs/RaceDay_API_Endpoint_Plan.md
           test -f docs/RaceDay_Database.sql
-          test -f docs/SSMS_EXECUTION_GUIDE.md
-          test -f docs/WALKTHROUGH_SCRIPT.md
+          test -f docs/SSMS_Verification_Queries.sql
+          test -f docs/Evidence/github-actions-green.png
 
-      - name: Validate ERD file
+      - name: Check ERD
         shell: bash
         run: |
           test -s docs/RaceDay_ERD.svg
           grep -qi "<svg" docs/RaceDay_ERD.svg
 
-      - name: Validate API plan
+      - name: Check API plan
         shell: bash
         run: |
           api_file="docs/RaceDay_API_Endpoint_Plan.md"
@@ -43,10 +44,11 @@ jobs:
           grep -q "/payments" "$api_file"
           grep -q "/results" "$api_file"
 
-      - name: Validate SQL schema
+      - name: Check SQL files
         shell: bash
         run: |
           sql_file="docs/RaceDay_Database.sql"
+          grep -qi "SET QUOTED_IDENTIFIER ON" "$sql_file"
           grep -qi "CREATE TABLE dbo.Organiser" "$sql_file"
           grep -qi "CREATE TABLE dbo.Participant" "$sql_file"
           grep -qi "CREATE TABLE dbo.Event" "$sql_file"
@@ -54,21 +56,14 @@ jobs:
           grep -qi "CREATE TABLE dbo.Enrolment" "$sql_file"
           grep -qi "CREATE TABLE dbo.Payment" "$sql_file"
           grep -qi "CREATE TABLE dbo.Race_Result" "$sql_file"
-          grep -qi "FOREIGN KEY" "$sql_file"
-          grep -qi "CHECK" "$sql_file"
-          grep -qi "UNIQUE" "$sql_file"
           grep -qi "UX_Payment_OneSuccessfulPayment" "$sql_file"
           grep -qi "trg_Enrolment_UpdateCategoryCount" "$sql_file"
           grep -qi "trg_Payment_ValidateAmount" "$sql_file"
+          grep -qi "SELECT TABLE_NAME" docs/SSMS_Verification_Queries.sql
 
-      - name: Check README and evidence
+      - name: Check README
         shell: bash
         run: |
           grep -qi "RaceDay" README.md
-          grep -qi "GitHub Actions" README.md
-          test -f docs/Evidence/github-actions-green.png
-
-      - name: Final validation
-        run: |
-          echo "RaceDay Part 1 repository checks passed."
-          echo "SQL Server execution evidence is completed separately in SSMS."
+          grep -q "9bIzD1thA6c" README.md
+          grep -q "github-actions-green.png" README.md

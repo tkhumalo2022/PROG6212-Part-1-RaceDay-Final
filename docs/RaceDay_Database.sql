@@ -1,10 +1,17 @@
--- ============================================================
--- RaceDay Database Schema
--- PROG6212 POE Part 1
--- Student: Thabiso Khumalo (ST10477675)
--- SQL Server / SSMS
--- ============================================================
+-- RaceDay database
+-- PROG6212 Part 1
+-- Thabiso Khumalo (ST10477675)
 
+SET ANSI_NULLS ON;
+SET QUOTED_IDENTIFIER ON;
+SET ANSI_PADDING ON;
+SET ANSI_WARNINGS ON;
+SET ARITHABORT ON;
+SET CONCAT_NULL_YIELDS_NULL ON;
+SET NUMERIC_ROUNDABORT OFF;
+GO
+
+-- reset database
 IF DB_ID('RaceDayDB') IS NOT NULL
 BEGIN
     ALTER DATABASE RaceDayDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
@@ -18,10 +25,7 @@ GO
 USE RaceDayDB;
 GO
 
--- ------------------------------------------------------------
--- ORGANISER
--- One organiser can own many events.
--- ------------------------------------------------------------
+-- organiser table
 CREATE TABLE dbo.Organiser (
     Organiser_ID     INT IDENTITY(1,1) PRIMARY KEY,
     Organiser_Name   VARCHAR(100) NOT NULL,
@@ -31,9 +35,7 @@ CREATE TABLE dbo.Organiser (
 );
 GO
 
--- ------------------------------------------------------------
--- PARTICIPANT
--- ------------------------------------------------------------
+-- participant table
 CREATE TABLE dbo.Participant (
     Participant_ID   INT IDENTITY(1,1) PRIMARY KEY,
     First_Name       VARCHAR(60) NOT NULL,
@@ -51,11 +53,7 @@ CREATE TABLE dbo.Participant (
 );
 GO
 
--- ------------------------------------------------------------
--- EVENT
--- Distance is stored on Race_Category because an event may have
--- more than one race distance.
--- ------------------------------------------------------------
+-- event table
 CREATE TABLE dbo.Event (
     Event_ID         INT IDENTITY(1,1) PRIMARY KEY,
     Organiser_ID     INT NOT NULL,
@@ -79,10 +77,7 @@ CREATE TABLE dbo.Event (
 );
 GO
 
--- ------------------------------------------------------------
--- RACE CATEGORY
--- Each event can contain one or more distance categories.
--- ------------------------------------------------------------
+-- race categories
 CREATE TABLE dbo.Race_Category (
     Category_ID          INT IDENTITY(1,1) PRIMARY KEY,
     Event_ID             INT NOT NULL,
@@ -109,10 +104,7 @@ CREATE TABLE dbo.Race_Category (
 );
 GO
 
--- ------------------------------------------------------------
--- ENROLMENT
--- Links a participant to an event and one of that event's categories.
--- ------------------------------------------------------------
+-- enrolments
 CREATE TABLE dbo.Enrolment (
     Enrolment_ID       INT IDENTITY(1,1) PRIMARY KEY,
     Participant_ID     INT NOT NULL,
@@ -136,11 +128,7 @@ CREATE TABLE dbo.Enrolment (
 );
 GO
 
--- ------------------------------------------------------------
--- PAYMENT
--- An enrolment may have many payment attempts, but only one can
--- have the successful Paid status.
--- ------------------------------------------------------------
+-- payments
 CREATE TABLE dbo.Payment (
     Payment_ID            INT IDENTITY(1,1) PRIMARY KEY,
     Enrolment_ID          INT NOT NULL,
@@ -163,15 +151,13 @@ CREATE TABLE dbo.Payment (
 );
 GO
 
+-- only one successful payment per enrolment
 CREATE UNIQUE INDEX UX_Payment_OneSuccessfulPayment
 ON dbo.Payment (Enrolment_ID)
 WHERE Payment_Status = 'Paid';
 GO
 
--- ------------------------------------------------------------
--- RACE RESULT
--- Each enrolment can have at most one result.
--- ------------------------------------------------------------
+-- race results
 CREATE TABLE dbo.Race_Result (
     Result_ID          INT IDENTITY(1,1) PRIMARY KEY,
     Enrolment_ID       INT NOT NULL UNIQUE,
@@ -192,7 +178,7 @@ CREATE TABLE dbo.Race_Result (
 );
 GO
 
--- Keep the category participant count in sync with active enrolments.
+-- keep participant counts updated
 CREATE TRIGGER dbo.trg_Enrolment_UpdateCategoryCount
 ON dbo.Enrolment
 AFTER INSERT, UPDATE, DELETE
@@ -218,7 +204,7 @@ BEGIN
 END;
 GO
 
--- Payment amount must match the selected category's entry fee.
+-- check payment amount against entry fee
 CREATE TRIGGER dbo.trg_Payment_ValidateAmount
 ON dbo.Payment
 AFTER INSERT, UPDATE
@@ -241,12 +227,7 @@ BEGIN
 END;
 GO
 
--- ============================================================
--- SAMPLE DATA
--- Minimum: 2 organisers, 2 participants, 3 events, categories
--- for every event and sample enrolments.
--- ============================================================
-
+-- sample data
 INSERT INTO dbo.Organiser (Organiser_Name, Email, Phone_Number)
 VALUES
 ('Durban Road Runners', 'events@durbanroadrunners.co.za', '0315550101'),
@@ -301,10 +282,7 @@ VALUES
 (1, '08:00:00', '08:52:34', 12, 'Finished');
 GO
 
--- ============================================================
--- VERIFICATION QUERIES
--- Run these in SSMS after the script completes.
--- ============================================================
+-- quick check
 SELECT * FROM dbo.Organiser;
 SELECT * FROM dbo.Participant;
 SELECT * FROM dbo.Event;
