@@ -15,16 +15,22 @@ For Part 1 I focused on the database design, UML ERD, API endpoint planning and 
 - `docs/RaceDay_ERD.svg` - UML ERD for the RaceDay database
 - `docs/RaceDay_API_Endpoint_Plan.md` - planned REST API endpoints
 - `docs/RaceDay_Database.sql` - SQL Server schema, constraints and sample data
-- `docs/SSMS_Verification_Queries.sql` - queries to run after the main database script
+- `docs/SSMS_Verification_Queries.sql` - queries used to check the database in SSMS
 - `docs/SSMS_EXECUTION_GUIDE.md` - notes for testing the database in SSMS
-- `docs/WALKTHROUGH_SCRIPT.md` - notes for the Part 1 video walkthrough
+- `docs/WALKTHROUGH_SCRIPT.md` - notes used for the Part 1 video walkthrough
 - `SUBMISSION_CHECKLIST.md` - final items to complete before submission
 
 ## Database
 
-The SQL script is written for Microsoft SQL Server. It creates the RaceDay tables, keys, relationships, constraints and sample data.
+The SQL script is written for Microsoft SQL Server. It creates the RaceDay tables, keys, relationships, constraints, triggers and sample data.
 
-I still need to run the script on my own SQL Server instance in SSMS and keep genuine screenshots of the successful execution and results.
+I tested the database successfully in SQL Server Management Studio. The seven RaceDay tables were created and the verification queries returned the sample data, triggers and payment index as expected.
+
+## Video walkthrough
+
+My Part 1 walkthrough is uploaded to YouTube as an unlisted video.
+
+[Watch the RaceDay Part 1 walkthrough](https://youtu.be/9bIzD1thA6c)
 
 ## GitHub Actions
 
@@ -36,9 +42,6 @@ The repository has a GitHub Actions workflow that checks the main project files,
 
 ## Current checkpoint
 
-**4 of 6 planned commits are complete.**
+**5 of 6 planned commits are complete.**
 
-The last two commits are being kept for work that needs real evidence:
-
-1. Run the database in SSMS, add genuine SQL execution evidence and the generated Schema + data script.
-2. Add the unlisted YouTube walkthrough link and complete the final submission check.
+The final commit is being kept for the last evidence screenshot and submission check.
