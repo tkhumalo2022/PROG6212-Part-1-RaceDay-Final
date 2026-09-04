@@ -1,4 +1,4 @@
-name: Validate Part 1 files
+name: Validate RaceDay Part 1
 
 on:
   push:
@@ -8,13 +8,14 @@ on:
 
 jobs:
   validate:
+    name: Review submission files
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check required Part 1 files
+      - name: Check project files
         shell: bash
         run: |
           test -f README.md
@@ -24,7 +25,25 @@ jobs:
           test -f docs/SSMS_EXECUTION_GUIDE.md
           test -f docs/WALKTHROUGH_SCRIPT.md
 
-      - name: Check seven RaceDay tables
+      - name: Validate ERD file
+        shell: bash
+        run: |
+          test -s docs/RaceDay_ERD.svg
+          grep -qi "<svg" docs/RaceDay_ERD.svg
+
+      - name: Validate API plan
+        shell: bash
+        run: |
+          api_file="docs/RaceDay_API_Endpoint_Plan.md"
+          grep -q "HTTP Method" "$api_file"
+          grep -q "Role Required" "$api_file"
+          grep -q "/api/auth/login" "$api_file"
+          grep -q "/api/events" "$api_file"
+          grep -q "/enrolments" "$api_file"
+          grep -q "/payments" "$api_file"
+          grep -q "/results" "$api_file"
+
+      - name: Validate SQL schema
         shell: bash
         run: |
           sql_file="docs/RaceDay_Database.sql"
@@ -35,21 +54,6 @@ jobs:
           grep -qi "CREATE TABLE dbo.Enrolment" "$sql_file"
           grep -qi "CREATE TABLE dbo.Payment" "$sql_file"
           grep -qi "CREATE TABLE dbo.Race_Result" "$sql_file"
-
-      - name: Check API plan structure
-        shell: bash
-        run: |
-          api_file="docs/RaceDay_API_Endpoint_Plan.md"
-          grep -q "HTTP Method" "$api_file"
-          grep -q "Role Required" "$api_file"
-          grep -q "/api/auth/login" "$api_file"
-          grep -q "/api/events" "$api_file"
-          grep -q "/payments" "$api_file"
-
-      - name: Check key database rules
-        shell: bash
-        run: |
-          sql_file="docs/RaceDay_Database.sql"
           grep -qi "FOREIGN KEY" "$sql_file"
           grep -qi "CHECK" "$sql_file"
           grep -qi "UNIQUE" "$sql_file"
@@ -57,7 +61,14 @@ jobs:
           grep -qi "trg_Enrolment_UpdateCategoryCount" "$sql_file"
           grep -qi "trg_Payment_ValidateAmount" "$sql_file"
 
-      - name: Validation complete
+      - name: Check README and evidence
+        shell: bash
+        run: |
+          grep -qi "RaceDay" README.md
+          grep -qi "GitHub Actions" README.md
+          test -f docs/Evidence/github-actions-green.png
+
+      - name: Final validation
         run: |
           echo "RaceDay Part 1 repository checks passed."
-          echo "SSMS execution still has to be demonstrated manually."
+          echo "SQL Server execution evidence is completed separately in SSMS."
