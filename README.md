@@ -6,34 +6,39 @@
 
 ## About the project
 
-This repo contains my Part 1 work for RaceDay. The idea is a system that can be used to manage running, walking and cycling race events.
+This repo contains my Part 1 work for RaceDay. The system is planned to manage running, walking and cycling race events.
 
-For Part 1 I focused on the database design, ERD and planning the API endpoints before starting the actual application.
+For Part 1 I focused on the database design, UML ERD, API endpoint planning and the SQL Server database script before implementation starts.
 
-## Files
+## Main files
 
 - `docs/RaceDay_ERD.svg` - UML ERD for the RaceDay database
-- `docs/RaceDay_API_Endpoint_Plan.md` - API endpoints I plan to use for the system
-- `docs/RaceDay_Database.sql` - SQL Server database script
-- `docs/SSMS_EXECUTION_GUIDE.md` - notes for running the database in SSMS
-- `docs/WALKTHROUGH_SCRIPT.md` - notes for the video walkthrough
+- `docs/RaceDay_API_Endpoint_Plan.md` - planned REST API endpoints
+- `docs/RaceDay_Database.sql` - SQL Server schema, constraints and sample data
+- `docs/SSMS_Verification_Queries.sql` - queries to run after the main database script
+- `docs/SSMS_EXECUTION_GUIDE.md` - notes for testing the database in SSMS
+- `docs/WALKTHROUGH_SCRIPT.md` - notes for the Part 1 video walkthrough
+- `SUBMISSION_CHECKLIST.md` - final items to complete before submission
 
 ## Database
 
-The SQL script is written for Microsoft SQL Server. It creates the RaceDay tables, keys and relationships and also includes sample data that I can use when testing the database.
+The SQL script is written for Microsoft SQL Server. It creates the RaceDay tables, keys, relationships, constraints and sample data.
 
-To test it, I open `docs/RaceDay_Database.sql` in SQL Server Management Studio and run the script against my RaceDay database.
+I still need to run the script on my own SQL Server instance in SSMS and keep genuine screenshots of the successful execution and results.
 
-## GitHub Actions check
+## GitHub Actions
 
-I added a small GitHub Actions check to make sure the main Part 1 files are in the repo and that the SQL script still contains the expected tables.
+The repository has a GitHub Actions workflow that checks the main project files, ERD, API plan, SQL schema, README and evidence file.
 
 ![Successful GitHub Actions run](docs/Evidence/github-actions-green.png)
 
-[GitHub Actions run #1](https://github.com/tkhumalo2022/PROG6212-Part-1-RaceDay-Final/actions/runs/33798705217)
+[Open the RaceDay Actions workflow](https://github.com/tkhumalo2022/PROG6212-Part-1-RaceDay-Final/actions)
 
-## What I still need to finish
+## Current checkpoint
 
-- Run the full database script in SSMS and keep screenshots of the results
-- Generate the final schema and data script from SSMS
-- Record the Part 1 walkthrough and upload it as an unlisted YouTube video
+**4 of 6 planned commits are complete.**
+
+The last two commits are being kept for work that needs real evidence:
+
+1. Run the database in SSMS, add genuine SQL execution evidence and the generated Schema + data script.
+2. Add the unlisted YouTube walkthrough link and complete the final submission check.
